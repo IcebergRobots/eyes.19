@@ -71,60 +71,29 @@ void Feeling::frame() {
       break;
 
     case FLIRT:
-      bitmap(FLIRT_FRAMES, 0);
+      bitmap(FLIRT_0_L, FLIRT_0_R);
       break;
 
     case DEAD:
-      left.drawBitmap(0, 0, DEAD_0_L, 8, 8, LED_ON);
-      right.drawBitmap(0, 0, DEAD_0_R, 8, 8, LED_ON);
+      bitmap(DEAD_0_L, DEAD_0_R);
       break;
 
     case TIRED:
-      if (aniPos <= 0) {
-        left.drawBitmap(0, 0, TIRED_0_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, TIRED_0_R, 8, 8, LED_ON);
-      } else if (aniPos == 1 || aniPos == 2) {
-        left.drawBitmap(0, 0, TIRED_1_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, TIRED_1_R, 8, 8, LED_ON);
-      } else if (aniPos == 3 || aniPos == 4) {
-        left.drawBitmap(0, 0, TIRED_2_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, TIRED_2_R, 8, 8, LED_ON);
-      } else if (aniPos == 5 || aniPos == 6) {
-        left.drawBitmap(0, 0, TIRED_3_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, TIRED_3_R, 8, 8, LED_ON);
-      } else {
-        left.drawBitmap(0, 0, TIRED_4_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, TIRED_4_R, 8, 8, LED_ON);
-      }
+      if (aniPos <= 0)      bitmap(TIRED_0_L, TIRED_0_R);
+      else if (aniPos <= 2) bitmap(TIRED_1_L, TIRED_1_R);
+      else if (aniPos <= 4) bitmap(TIRED_2_L, TIRED_2_R);
+      else if (aniPos <= 6) bitmap(TIRED_3_L, TIRED_3_R);
+      else                  bitmap(TIRED_4_L, TIRED_4_R);
       break;
 
     case SEARCHING:
-      if (aniPos <= 0) {
-        left.drawBitmap(0, 0, SEARCHING_0_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, SEARCHING_0_R, 8, 8, LED_ON);
-      } else if (aniPos == 1 || aniPos == 2) {
-        left.drawBitmap(0, 0, SEARCHING_1_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, SEARCHING_1_R, 8, 8, LED_ON);
-      } else if (aniPos == 3 || aniPos == 4) {
-        left.drawBitmap(0, 0, SEARCHING_2_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, SEARCHING_2_R, 8, 8, LED_ON);
-      } else if (aniPos >= 8 && aniPos % 8 == 0) {                  //ab hier
-        left.drawBitmap(0, 0, SEARCHING_3_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, SEARCHING_3_R, 8, 8, LED_ON);
-      } else if (aniPos >= 8 && aniPos % 8 == 1 || aniPos % 8 == 2 || aniPos % 8 == 3) {                      //extrem
-        left.drawBitmap(0, 0, SEARCHING_4_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, SEARCHING_4_R, 8, 8, LED_ON);
-      } else if (aniPos >= 8 && aniPos % 8 == 4) {
-        left.drawBitmap(0, 0, SEARCHING_5_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, SEARCHING_5_R, 8, 8, LED_ON);
-      } else if (aniPos >= 8 && aniPos % 8 == 5 || aniPos % 8 == 6 || aniPos % 8 == 7) {                     //extrem
-        left.drawBitmap(0, 0, SEARCHING_6_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, SEARCHING_6_R, 8, 8, LED_ON);
-      } else {
-        left.drawBitmap(0, 0, SEARCHING_2_L, 8, 8, LED_ON);
-        right.drawBitmap(0, 0, SEARCHING_2_R, 8, 8, LED_ON);
-        aniPos = 5;
-      }
+      aniPos %= 12;
+      if      (aniPos <= 0 || aniPos >= 11) bitmap(SEARCHING_0_L, SEARCHING_0_R);
+      else if (aniPos <= 1 || aniPos >= 10) bitmap(SEARCHING_1_L, SEARCHING_1_R);
+      else if (aniPos <= 2 || aniPos >= 9)  bitmap(SEARCHING_2_L, SEARCHING_2_R);
+      else if (aniPos <= 3 || aniPos >= 8)  bitmap(SEARCHING_3_L, SEARCHING_3_R);
+      else if (aniPos <= 4 || aniPos >= 7)  bitmap(SEARCHING_4_L, SEARCHING_4_R);
+      else                                  bitmap(SEARCHING_5_L, SEARCHING_5_R);
       break;
   }
   aniPos++;
@@ -133,30 +102,8 @@ void Feeling::frame() {
   right.writeDisplay();
 }
 
-void Feeling::bitmap(byte frame[], byte index) {
-  for (int row = 0; row < 8; row++) {
-    byte bitlineLeft[] = {frame[index*8+row]};
-    byte bitlineRight[] = {reverse(frame[index*8+row])};
-    //const byte bitlineLeft[] = {reverse(/*frame[index*8+i]*/)};
-
-    //byte a = B10101010;
-    //byte b = reverse(B10101010);
-    //byte p[] = {a};
-    left.drawBitmap(0, row, bitlineLeft, 8, 1, LED_ON);
-    right.drawBitmap(0, row, bitlineRight, 8, 1, LED_ON);
-  }
-}
-
-byte Feeling::reverse(byte in) {
-  byte out = 0;
-  if (in & 0x01) out |= 0x80;
-  if (in & 0x02) out |= 0x40;
-  if (in & 0x04) out |= 0x20;
-  if (in & 0x08) out |= 0x10;
-  if (in & 0x10) out |= 0x08;
-  if (in & 0x20) out |= 0x04;
-  if (in & 0x40) out |= 0x02;
-  if (in & 0x80) out |= 0x01;
-  return out;
+void Feeling::bitmap(const byte bitmapLeft[], const byte bitmapRight[]) {
+  left.drawBitmap(0, 0, bitmapLeft, 8, 8, LED_ON);
+  right.drawBitmap(0, 0, bitmapRight, 8, 8, LED_ON);
 }
 

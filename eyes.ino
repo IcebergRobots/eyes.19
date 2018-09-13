@@ -9,7 +9,7 @@ void setup() {
   Serial.println("8x8 LED Matrix Test");
   
   feeling.init();
-  feeling.flirt();
+  feeling.searching();
 }
 
 void loop() {

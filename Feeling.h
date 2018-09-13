@@ -15,8 +15,7 @@ class Feeling {
     void flirt();
     void dead();
   private:
-    void bitmap(byte frame[], byte index);
-    byte reverse(byte in);
+    void bitmap(const byte bitmapLeft[], const byte bitmapRight[]);
     void setState(byte s);
     byte state = 0;
     int aniPos = 0;
@@ -443,15 +442,25 @@ DEAD_0_R[] =
   B00100010,
   B00000000
 },
-FLIRT_FRAMES[] =
-{ B01111100,
-  B10000010,
+FLIRT_0_L[] =
+{ B11111110,
+  B00000000,
   B01101100,
   B11111110,
   B11111110,
   B01111100,
   B00111000,
   B00010000
+},
+FLIRT_0_R[] =
+{ B01111111,
+  B00000000,
+  B00110110,
+  B01111111,
+  B01111111,
+  B00111110,
+  B00011100,
+  B00001000
 };
 
 #endif
