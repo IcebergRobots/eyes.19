@@ -134,11 +134,16 @@ void Feeling::frame() {
 }
 
 void Feeling::bitmap(byte frame[], byte index) {
-  for (int i = 0; i < 8; i++) {
-    byte &a = 0;
-    byte &b = 0;
-    right.drawBitmap(0, 0, a/*frame[index*8+i]*/, 1, 8, LED_ON);
-    left.drawBitmap(0, 0, b/*reverse(frame[index*8+i]*/), 1, 8, LED_ON);
+  for (int row = 0; row < 8; row++) {
+    byte bitlineLeft[] = {frame[index*8+row]};
+    byte bitlineRight[] = {reverse(frame[index*8+row])};
+    //const byte bitlineLeft[] = {reverse(/*frame[index*8+i]*/)};
+
+    //byte a = B10101010;
+    //byte b = reverse(B10101010);
+    //byte p[] = {a};
+    left.drawBitmap(0, row, bitlineLeft, 8, 1, LED_ON);
+    right.drawBitmap(0, row, bitlineRight, 8, 1, LED_ON);
   }
 }
 
